@@ -22,6 +22,16 @@ fun main() {
         // เลือก 'exit' เพื่อออกจากโปรแกรม
         // 🚨
 
+        when(choice.lowercase()){
+            "1" -> convertCelsiusToFahrenheit()
+            "2" -> convertKilometersToMiles()
+            "exit" -> {
+                print("ลาก่อน :) ")
+                break
+            }
+            else -> print("เลือกไม่ถูก เลือกใหม่")
+        }
+
 
         println() // พิมพ์บรรทัดว่างเพื่อความสวยงาม
     }
@@ -30,18 +40,27 @@ fun main() {
 // 4. สร้างฟังก์ชันแยกสำหรับการแปลงหน่วย Celsius to Fahrenheit: celsiusToFahrenheit
 // สูตร celsius * 9.0 / 5.0 + 32
 // 🚨
-
+fun celsiusToFahrenheit(celsius: Double):Double {
+    return celsius * 9.0/5.0+32
+}
 
 // 4. สร้างฟังก์ชันแยกสำหรับการแปลงหน่วย Kilometers to Miles: kilometersToMiles
 // สูตร kilometers * 0.621371
 // 🚨
-
+fun kilometersToMiles(kilometers: Double): Double {
+    return kilometers * 0.621371
+}
 
 // ฟังก์ชันสำหรับจัดการกระบวนการแปลง Celsius to Fahrenheit ทั้งหมด
 fun convertCelsiusToFahrenheit() {
     print("ป้อนค่าองศาเซลเซียส (Celsius): ")
     val input = readln()
+    val celsius = input.toDoubleOrNull()
 
+    if(celsius == null) {
+        println(" กรุณาป้อนเลขให้ถูก ")
+        return
+    }
     // 5. จัดการ Null Safety ด้วย toDoubleOrNull() และ Elvis operator (?:)
     // ออกจากฟังก์ชัน convertCelsiusToFahrenheit() หากข้อมูลผิดพลาด: return
     // celsius
@@ -49,7 +68,8 @@ fun convertCelsiusToFahrenheit() {
 
 
 //🚨    val fahrenheitResult = celsiusToFahrenheit(celsius)
-
+val fahrenheitResult = celsiusToFahrenheit(celsius)
+    println("ผลลัพธ์: $celsius °C เท่ากับ ${"%.2f".format(fahrenheitResult)} °F")
     // 6. แสดงผลลัพธ์
     // ใช้ String format เพื่อแสดงทศนิยม 2 ตำแหน่ง
 //🚨    println("ผลลัพธ์: $celsius °C เท่ากับ ${"%.2f".format(fahrenheitResult)} °F")
@@ -59,7 +79,12 @@ fun convertCelsiusToFahrenheit() {
 fun convertKilometersToMiles() {
     print("ป้อนค่ากิโลเมตร (Kilometers): ")
     val input = readln()
+    val kilometers = input.toDoubleOrNull()
 
+    if(kilometers == null) {
+        print("กรุณาป้องตัวเลขให้ถูก ")
+        return
+    }
     // 5. จัดการ Null Safety ด้วย toDoubleOrNull() และ Elvis operator (?:)
     // ออกจากฟังก์ชัน convertKilometersToMiles() หากข้อมูลผิดพลาด: return
     // kilometers
@@ -67,7 +92,8 @@ fun convertKilometersToMiles() {
 
 
 //🚨    val milesResult = kilometersToMiles(kilometers)
-
+    val milesResult = kilometersToMiles(kilometers)
+    println("ผลลัพธ์: $kilometers km เท่ากับ ${"%.2f".format(milesResult)} miles")
+}
     // 6. แสดงผลลัพธ์
 //🚨    println("ผลลัพธ์: $kilometers km เท่ากับ ${"%.2f".format(milesResult)} miles")
-}
