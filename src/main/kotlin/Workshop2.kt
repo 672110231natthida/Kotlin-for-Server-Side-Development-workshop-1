@@ -14,7 +14,7 @@ fun main() {
     // สินค้า name = "Headphones", price = 1800.0, category = "Electronics" // ตรงตามเงื่อนไข
 //🚨    val products = ?
 
-    val products = listOf (
+    val products = listOf(
         Product("Laptop", 35000.0, "Electronics"),
         Product("Smartphone", 25000.0, "Electronics"),
         Product("T-shirt", 450.0, "Apparel"),
@@ -36,9 +36,9 @@ fun main() {
     // ดึงเฉพาะราคาออกมาเป็น List<Double>
     // หาผลรวมของราคา
 
-        val totalElecPriceOver500 = products
+    val totalElecPriceOver500 = products
         .filter { it.category == "Electronics" }
-        .filter { it.price>500.0 }
+        .filter { it.price > 500.0 }
         .map { it.price }
         .sum()
 
@@ -53,7 +53,7 @@ fun main() {
     val totalElecPriceOver500Sequence = products
         .asSequence()
         .filter { it.category == "Electronics" }
-        .filter { it.price>500.0 }
+        .filter { it.price > 500.0 }
         .map { it.price }
         .sum()
 
@@ -75,4 +75,25 @@ fun main() {
     println("   - เช่น: 'Laptop' จะถูก filter category -> filter price -> map price จากนั้น 'Smartphone' ถึงจะเริ่มทำกระบวนการเดียวกัน")
     println("   - จะไม่มีการสร้าง Collection กลางทาง ทำให้ประหยัดหน่วยความจำและเร็วกว่ามากสำหรับชุดข้อมูลขนาดใหญ่ เพราะทำงานกับข้อมูลทีละชิ้นและทำทุกขั้นตอนให้เสร็จในรอบเดียว")
     println("   - การคำนวณจะเกิดขึ้นเมื่อมี 'Terminal Operation' มาเรียกใช้เท่านั้น (ในที่นี้คือ .sum())")
+
+
+    // จัดกลุ่มตามช่วงราคา
+    val groupedByPriceRange = products.groupBy { product ->
+        when {
+            product.price <= 1000 -> "ไม่เกิน 1,000 บาท"
+            product.price in 1001.0..9999.0 -> "1,001 - 9,999 บาท"
+            else -> "10,000 บาทขึ้นไป"
+        }
+    }
+
+    // แสดงผล
+    println("=== การจัดกลุ่มสินค้าตามช่วงราคา ===")
+    for ((range, items) in groupedByPriceRange) {
+        println("ช่วงราคา: $range")
+        items.forEach { println(" - ${it.name} (${it.price} บาท)") }
+        println()
+    }
 }
+
+
+
