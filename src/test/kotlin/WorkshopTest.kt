@@ -1,3 +1,5 @@
+import org.example.celsiusToFahrenheit
+import org.example.kilometersToMiles
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -25,12 +27,21 @@ class WorkshopTest {
     @Test
     fun `test celsiusToFahrenheit with zero`() {
 
+        val celsiusInput = 0.0
+        val expectedFahrenheit = 32.0
+        val actualFahrenheit = celsiusToFahrenheit(celsiusInput)
+        assertEquals(expectedFahrenheit, actualFahrenheit , 0.001,"0°C should be 32°F")
     }
 
     // celsius input: -10.0
     // expected output: 14.0
     @Test
     fun `test celsiusToFahrenheit with negative value`() {
+
+        val celsiusInput = -10.0
+        val expectedFahrenheit = 14.0
+        val actualFahrenheit = celsiusToFahrenheit(celsiusInput)
+        assertEquals(expectedFahrenheit, actualFahrenheit, 0.001, "-10°C should be 14°F")
 
     }
 
@@ -40,7 +51,12 @@ class WorkshopTest {
     @Test
     fun `test kilometersToMiles with one kilometer`() {
 
+        val kilometers = 1.0
+        val expectedMiles = 0.621371
+        val actualMiles = kilometersToMiles(kilometers)
+        assertEquals(expectedMiles, actualMiles, 0.000001, "1 km should be 0.621371 miles")
     }
+
 
     // --- Tests for Workshop #1: Unit Converter End ---
 

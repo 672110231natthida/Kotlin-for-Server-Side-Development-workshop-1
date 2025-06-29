@@ -3,26 +3,30 @@ package org.example
 // 1. กำหนด data class สำหรับเก็บข้อมูลสินค้า
 data class Product(val name: String, val price: Double, val category: String)
 
+fun calculateTotalElectronicsPriceOver500(products: List<Product>): Double {
+    return products
+        .filter { it.category == "Electronics" && it.price > 500 }
+        .sumOf { it.price }
+}
+
+fun countElectronicsOver500(products: List<Product>): Int {
+    return products
+        .count { it.category == "Electronics" && it.price > 500 }
+}
+
+
 fun main() {
     // 2. สร้างรายการสินค้าตัวอย่าง (List<Product>)
-    // สินค้า name = "Laptop", price = 35000.0, category = "Electronics"
-    // สินค้า name = "Smartphone", price = 25000.0, category = "Electronics"
-    // สินค้า name = "T-shirt", price = 450.0, category = "Apparel"
-    // สินค้า name = "Monitor", price = 7500.0, category = "Electronics"
-    // สินค้า name = "Keyboard", price = 499.0, category = "Electronics" // ราคาไม่เกิน 500
-    // สินค้า name = "Jeans", price = 1200.0, category = "Apparel"
-    // สินค้า name = "Headphones", price = 1800.0, category = "Electronics" // ตรงตามเงื่อนไข
-//🚨    val products = ?
-
     val products = listOf(
-        Product("Laptop", 35000.0, "Electronics"),
-        Product("Smartphone", 25000.0, "Electronics"),
-        Product("T-shirt", 450.0, "Apparel"),
-        Product("Monitor", 7500.0, "Electronics"),
-        Product("Keyboard", 499.0, "Electronics"),
-        Product("Jeans", 1200.0, "Apparel"),
-        Product("Headphones", 1800.0, "Electronics")
-    )
+        Product ("Laptop", 35000.0, "Electronics"),
+        Product ("Smartphone", 25000.0, "Electronics"),
+        Product ("T-shirt", 450.0, "Apparel"),
+        Product ("Monitor", 7500.0, "Electronics"),
+        Product ("Keyboard", 499.0, "Electronics"), // ราคาไม่เกิน 500
+        Product ("Jeans", 1200.0, "Apparel"),
+        Product ("Headphones", 1800.0, "Electronics")
+    )// ตรงตามเงื่อนไข
+//🚨    val products = ?
 
     println("รายการสินค้าทั้งหมด:")
     products.forEach { println(it) }
@@ -35,11 +39,10 @@ fun main() {
     // กรองสินค้าที่ราคามากกว่า 500
     // ดึงเฉพาะราคาออกมาเป็น List<Double>
     // หาผลรวมของราคา
-
     val totalElecPriceOver500 = products
         .filter { it.category == "Electronics" }
-        .filter { it.price > 500.0 }
-        .map { it.price }
+        .filter { it.price > 500 }
+        .map {it.price}
         .sum()
 
     println("วิธีที่ 1: ใช้ Chaining กับ List")
@@ -49,17 +52,32 @@ fun main() {
 
     // 4. (ขั้นสูง) วิธีที่ 2: การใช้ .asSequence() เพื่อเพิ่มประสิทธิภาพ
     // แปลง List เป็น Sequence ก่อนเริ่มประมวลผล
-
     val totalElecPriceOver500Sequence = products
         .asSequence()
         .filter { it.category == "Electronics" }
-        .filter { it.price > 500.0 }
+        .filter { it.price > 500 }
         .map { it.price }
         .sum()
 
     println("วิธีที่ 2: ใช้ .asSequence() (ขั้นสูง)")
     println("ผลรวมราคาสินค้า Electronics ที่ราคา > 500 บาท: $totalElecPriceOver500Sequence บาท")
     println("--------------------------------------------------")
+
+    val groupedProducts = products.groupBy { product ->
+        when {
+            product.price <= 1000 -> "ต่ำกว่า 1,000 บาท"
+            product.price in 1000.0..9999.99 -> "1,000 - 9,999 บาท"
+            else -> "10,000 บาทขึ้นไป"
+        }
+    }
+
+    for ((range, items) in groupedProducts) {
+        println("กลุ่ม: $range")
+        items.forEach { println(" - ${it.name} (${it.price} บาท)") }
+        println()
+    }
+
+
 
 
     println("อภิปรายความแตกต่างระหว่าง List และ Sequence:")
@@ -75,25 +93,5 @@ fun main() {
     println("   - เช่น: 'Laptop' จะถูก filter category -> filter price -> map price จากนั้น 'Smartphone' ถึงจะเริ่มทำกระบวนการเดียวกัน")
     println("   - จะไม่มีการสร้าง Collection กลางทาง ทำให้ประหยัดหน่วยความจำและเร็วกว่ามากสำหรับชุดข้อมูลขนาดใหญ่ เพราะทำงานกับข้อมูลทีละชิ้นและทำทุกขั้นตอนให้เสร็จในรอบเดียว")
     println("   - การคำนวณจะเกิดขึ้นเมื่อมี 'Terminal Operation' มาเรียกใช้เท่านั้น (ในที่นี้คือ .sum())")
-
-
-    // จัดกลุ่มตามช่วงราคา
-    val groupedByPriceRange = products.groupBy { product ->
-        when {
-            product.price <= 1000 -> "ไม่เกิน 1,000 บาท"
-            product.price in 1001.0..9999.0 -> "1,001 - 9,999 บาท"
-            else -> "10,000 บาทขึ้นไป"
-        }
-    }
-
-    // แสดงผล
-    println("=== การจัดกลุ่มสินค้าตามช่วงราคา ===")
-    for ((range, items) in groupedByPriceRange) {
-        println("ช่วงราคา: $range")
-        items.forEach { println(" - ${it.name} (${it.price} บาท)") }
-        println()
-    }
 }
-
-
 
