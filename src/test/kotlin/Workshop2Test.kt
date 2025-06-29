@@ -14,7 +14,7 @@ class Workshop2Test {
         Product("Jeans", 1200.0, "Apparel"),
         Product("Headphones", 1800.0, "Electronics")
     )
-
+//44
     @Test
     fun testCalculateTotalElectronicsPriceOver500() {
         val expected = 35000.0 + 25000.0 + 7500.0 + 1800.0
